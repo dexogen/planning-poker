@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Poker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='logo.css') }}">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+    </div>
+    <div>Create new room</div>
+</div>
+
+<div class="container">
+    <p class="info-text">You can join the room with this URL</p>
+    <div class="link-container">
+        <label for="room-link"></label>
+        <input type="text" id="room-link" readonly>
+    </div>
+    <button id="create-room" class="create-room-button">Create room</button>
+</div>
+
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+<script>
+    document.getElementById("room-link").addEventListener("click", function () {
+        this.select();
+        document.execCommand("copy");
+    });
+</script>
+</body>
+</html>
