@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room {{ room_id }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='room.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
 </head>
 <body>
+{% include 'includes/header.html' %}
+
 <div class="modal-overlay" id="display-name-popup">
     <div class="modal-content">
         <h2>Choose your display name</h2>

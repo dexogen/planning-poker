@@ -1,2 +1,5 @@
 *.gz
 *.tar
+*.env
+*.conf
+*.sh

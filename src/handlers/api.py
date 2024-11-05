@@ -8,7 +8,7 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/room", methods=["POST"])
 def create_room():
-    room_id = str(uuid.uuid4())
+    room_id = f"{str(uuid.uuid4())[:8]}"
     rooms[room_id] = {"participants": {}, "status": "start"}
     return jsonify({"room_id": room_id})
 
