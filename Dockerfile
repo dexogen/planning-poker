@@ -20,7 +20,7 @@ ENV GUNICORN_TIMEOUT=120
 
 EXPOSE 8000
 
-CMD gunicorn --bind ${GUNICORN_BIND} --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT} run:create_app()
+CMD gunicorn --bind ${GUNICORN_BIND} --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT} wsgi:app
 
 FROM base AS test
 
