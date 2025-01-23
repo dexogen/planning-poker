@@ -9,6 +9,7 @@ on:
     paths:
     - 'src/**'
     - '.github/workflows/**'
+    - 'Dockerfile'
   workflow_dispatch:
 
 
