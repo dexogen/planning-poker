@@ -20,8 +20,7 @@ ENV GUNICORN_TIMEOUT=120
 
 EXPOSE 8000
 
-ENTRYPOINT ["gunicorn"]
-CMD ["--bind", "${GUNICORN_BIND}", "--workers", "${GUNICORN_WORKERS}", "--timeout", "${GUNICORN_TIMEOUT}", "run:create_app()"]
+CMD gunicorn --bind ${GUNICORN_BIND} --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT} run:create_app()
 
 FROM base AS test
 
