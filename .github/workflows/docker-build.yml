@@ -1,0 +1,64 @@
+name: Build and Push Docker Image to GHCR
+
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - "*"
+    paths:
+    - 'src/**'
+    - '.github/workflows/**'
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: all
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Determine docker tags
+      id: docker_tags
+      run: |
+        if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/}"
+          echo "tags=ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${VERSION},ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest" >> $GITHUB_OUTPUT
+        else
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          echo "tags=ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:sha-${SHORT_SHA}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src
+        file: ./Dockerfile
+        target: app
+        platforms: linux/amd64, linux/arm64
+        push: true
+        tags: ${{ steps.docker_tags.outputs.tags }}
+        labels: |
+          org.opencontainers.image.source=${{ github.repository }}
+          org.opencontainers.image.revision=${{ github.sha }}
